@@ -2,32 +2,38 @@
 # AI-powered Product De-recommendation Engine
 
 # Web Framework
-fastapi==0.109.0
-uvicorn[standard]==0.27.0
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# LangChain Core
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-openai>=0.2.0
+langgraph>=0.2.0
 
 # LLM Integration
-openai==1.12.0
-anthropic==0.18.0
+openai>=1.12.0
 
 # Web Scraping
-httpx==0.26.0
-beautifulsoup4==4.12.3
-lxml==5.1.0
+httpx>=0.26.0
+beautifulsoup4>=4.12.3
+lxml>=5.1.0
 
 # Data Processing
-pandas==2.2.0
-numpy==1.26.3
+pandas>=2.2.0
+numpy>=1.26.3
 
 # Async Support
-aiohttp==3.9.3
+aiohttp>=3.9.3
 
 # Environment & Config
-python-dotenv==1.0.1
-pydantic==2.6.0
-pydantic-settings==2.1.0
+python-dotenv>=1.0.1
+pydantic>=2.6.0
+pydantic-settings>=2.1.0
 
 # CORS & Security
-python-multipart==0.0.9
+python-multipart>=0.0.9
 
 # Optional: Firecrawl for advanced scraping
-# firecrawl-py==0.0.8
+# firecrawl-py>=0.0.8
