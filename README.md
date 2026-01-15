@@ -5,7 +5,12 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)
 ![LangChain](https://img.shields.io/badge/LangChain-0.3+-orange.svg)
+![DeepSeek](https://img.shields.io/badge/DeepSeek-V3-purple.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+
+<p align="center">
+  <img src="https://img.shields.io/badge/⚠️-杠精选品助手-red?style=for-the-badge" alt="The Last 5%">
+</p>
 
 ## 🎯 项目定位
 
@@ -22,7 +27,7 @@
 
 ### 🔗 LangChain 智能 Agent 链路
 
-使用 **LangChain + LangGraph** 构建的智能分析系统，包含 4 个专业工具：
+使用 **LangChain** 构建的智能分析系统，包含 4 个专业工具：
 
 | 工具 | 功能 | 说明 |
 |-----|------|------|
@@ -57,14 +62,22 @@
 
 ## 🎨 UI 设计
 
-- **实验室报告风格**：不像购物网站，像「避坑黑榜」
+- **ChatGPT 风格界面**：对话式交互，简洁清爽
+- **红白配色主题**：醒目的警告风格
 - **避坑指数进度条**：从「可以一试」到「快跑！」
 - **吐槽热力图**：直观显示用户最不满意的模块
 - **替代方案建议**：劝退后给你指条明路
 
 ## 🚀 快速开始
 
-### 1. 安装依赖
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/mm1025048717-hash/the-last-5-percent.git
+cd the-last-5-percent
+```
+
+### 2. 安装依赖
 
 ```bash
 # 创建虚拟环境
@@ -80,17 +93,23 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. 配置 API Key（可选）
+### 3. 配置 API Key（推荐）
 
-复制 `env.example.txt` 为 `.env`，填入你的 API Key：
+创建 `.env` 文件，配置 DeepSeek 或 OpenAI API Key：
 
-```
-OPENAI_API_KEY=your_openai_api_key_here
+```env
+# 推荐使用 DeepSeek（性价比高）
+LLM_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+
+# 或使用 OpenAI
+# LLM_PROVIDER=openai
+# OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 > **注意**：不配置 API Key 也能运行，会使用内置的演示数据。
 
-### 3. 启动服务
+### 4. 启动服务
 
 ```bash
 python run.py
@@ -98,29 +117,77 @@ python run.py
 
 访问 http://localhost:8000 开始使用！
 
+## 📡 API 文档
+
+### 核心端点
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/analyze` | POST | 产品避坑分析（主接口） |
+| `/api/chat` | POST | 对话式交互 |
+| `/api/tools` | GET | 列出所有可用工具 |
+| `/api/health` | GET | 健康检查 |
+
+### 分析请求示例
+
+```bash
+curl -X POST http://localhost:8000/api/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "product_name": "扫地机器人",
+    "user_scenario": "家里有两只猫，120平三室一厅"
+  }'
+```
+
+### 响应结构
+
+```json
+{
+  "product_name": "扫地机器人",
+  "risk_level": "warning",
+  "risk_score": 62,
+  "summary": "「扫地机器人」有明显短板，建议对比同类竞品后再决定。最大槽点：边刷容易缠绕头发",
+  "defects": [...],
+  "scenario_warnings": [...],
+  "history_events": [...],
+  "heatmap_data": [...],
+  "alternatives": [...]
+}
+```
+
 ## 📁 项目结构
 
 ```
-电商选品器/
+the-last-5-percent/
 ├── backend/
-│   ├── agents/                # 旧版 Agent（向后兼容）
+│   ├── agents/                # 基础 Agent（向后兼容）
 │   │   ├── base_agent.py
-│   │   ├── denoise_agent.py
-│   │   ├── scenario_agent.py
-│   │   └── history_agent.py
-│   ├── langchain_tools.py     # 🆕 LangChain 工具集
-│   ├── langchain_agent.py     # 🆕 LangChain 智能 Agent
+│   │   ├── denoise_agent.py   # 差评脱水机
+│   │   ├── scenario_agent.py  # 场景撞墙预测
+│   │   └── history_agent.py   # 黑历史追溯
+│   ├── langchain_tools.py     # LangChain 工具集
+│   ├── langchain_agent.py     # LangChain 智能 Agent
 │   ├── config.py              # 配置管理
-│   ├── models.py              # 数据模型
+│   ├── models.py              # Pydantic 数据模型
 │   └── main.py                # FastAPI 主应用
 ├── frontend/
 │   ├── index.html             # ChatGPT 风格界面
 │   ├── styles.css             # 红白配色主题
-│   └── app.js                 # 前端逻辑
-├── requirements.txt           # Python 依赖（含 LangChain）
+│   └── app.js                 # 前端交互逻辑
+├── requirements.txt           # Python 依赖
 ├── run.py                     # 启动脚本
-└── README.md                  # 项目说明
+└── README.md
 ```
+
+## 🔧 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| **后端框架** | FastAPI |
+| **AI 框架** | LangChain |
+| **LLM** | DeepSeek-V3 / GPT-4o |
+| **前端** | 原生 HTML/CSS/JS |
+| **数据验证** | Pydantic |
 
 ## 💡 差异化优势
 
@@ -134,17 +201,24 @@ python run.py
 
 ## 🎯 推荐使用场景
 
-1. **高客单价产品决策**：扫地机器人、投影仪、人体工学椅
+1. **高客单价产品决策**：扫地机器人、投影仪、人体工学椅、折叠屏手机
 2. **避免冲动消费**：在下单前让 AI 泼一盆冷水
 3. **对比竞品**：了解各产品的「硬伤」在哪里
 
-## 🛣️ 后续规划
+## 🛣️ Roadmap
 
-- [ ] 接入 Firecrawl 实时抓取评论数据
+- [x] LangChain Agent 链路
+- [x] ChatGPT 风格 UI
+- [x] DeepSeek API 集成
+- [ ] 接入 Firecrawl 实时抓取评论
 - [ ] 支持粘贴商品链接直接分析
-- [ ] 增加更多垂直类目（护肤品、宠物用品等）
+- [ ] 更多垂直类目（护肤品、宠物用品）
 - [ ] 浏览器插件版本
 - [ ] 付费深度报告功能
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
 
 ## 📄 License
 
@@ -152,4 +226,6 @@ MIT License
 
 ---
 
-**The Last 5%** - 因为最后 5% 的细节，决定了你会不会后悔。
+<p align="center">
+  <strong>The Last 5%</strong> - 因为最后 5% 的细节，决定了你会不会后悔。
+</p>
