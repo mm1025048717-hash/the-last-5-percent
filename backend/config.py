@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     # API Keys
     openai_api_key: str = ""
     anthropic_api_key: str = ""
-    deepseek_api_key: str = "sk-9b672e99df8b4a6a84f7e1b67941f672"  # DeepSeek API
+    deepseek_api_key: str = ""  # DeepSeek API - 在 .env 文件中配置
     firecrawl_api_key: str = ""
     
     # LLM Provider: "deepseek" or "openai"
